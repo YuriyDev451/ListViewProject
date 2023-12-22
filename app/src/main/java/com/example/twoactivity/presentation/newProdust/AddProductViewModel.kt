@@ -24,15 +24,5 @@ class AddProductViewModel: ViewModel() {
         newProductCallBack.postValue(true)
     }
 
-   private fun parseEditText(){
-        if (id.value.isNullOrEmpty()
-            || name.value.isNullOrEmpty()
-            || description.value.isNullOrEmpty()){
-            errorDescription.postValue("Zapolnite polya")
-            return
-        }
-    }
-
-
 
 }

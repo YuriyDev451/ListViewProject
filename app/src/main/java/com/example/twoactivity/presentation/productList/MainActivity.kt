@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.twoactivity.adapters.ProductListAdapter
 import com.example.twoactivity.databinding.ActivityMainBinding
 import com.example.twoactivity.domain.Product
 import com.example.twoactivity.presentation.newProdust.ActivityAddProduct
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
+    var adapter: ProductListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,24 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+
+        var items = mutableListOf<Product>()
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+        items.add(Product(0, "fruit", "description"))
+
+
+        val adapter = ProductListAdapter(this.baseContext, items, onClickItem = {product ->  
+            println(product.name)
+        } )
+        binding.productListView.adapter = adapter
 
     }
 
@@ -42,7 +63,9 @@ class MainActivity : AppCompatActivity() {
 
         if (it.resultCode == Activity.RESULT_OK) {
             val item = it.data?.getParcelableExtra<Product>("product")
-            println(item)
+            item?.let {
+                adapter
+            }
         }
     }
 
@@ -58,6 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     fun removeObservers(){
         viewModel.onClick.removeObservers(this)
+        viewModel.onClick.postValue(false)
 
     }
 
