@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
-    var adapter: ProductListAdapter? = null
+    private lateinit var _adapter: ProductListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,23 +29,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        var items = mutableListOf<Product>()
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
-        items.add(Product(0, "fruit", "description"))
+       // var items = mutableListOf<Product>()
+       // items.add(Product(0, "fruit", "description"))
 
 
-        val adapter = ProductListAdapter(this.baseContext, items, onClickItem = {product ->  
+
+        val _adapter = ProductListAdapter(this.baseContext, mutableListOf(), onClickItem = {product ->
             println(product.name)
         } )
-        binding.productListView.adapter = adapter
+        binding.productListView.adapter = _adapter
 
     }
 
@@ -64,7 +56,10 @@ class MainActivity : AppCompatActivity() {
         if (it.resultCode == Activity.RESULT_OK) {
             val item = it.data?.getParcelableExtra<Product>("product")
             item?.let {
-                adapter
+                viewModel.addNewProduct(it)?.let {product->
+                    _adapter?.addNewItem(product)
+                }
+
             }
         }
     }
